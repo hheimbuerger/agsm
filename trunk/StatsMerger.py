@@ -421,7 +421,7 @@ class StatsMerger:
 
         # add the borders at the left and right side (WARNING: writes more than necessary to the bottom!)
         for i in xrange(0, (innerHeight / self.statsScreenLeftBorder.size[1])+1):
-            thisSideBorderY = playerStatsY + i * self.statsScreenLeftBorder.size[1]
+            thisSideBorderY = tableHeaderY + i * self.statsScreenLeftBorder.size[1]
             finalImage.paste(self.statsScreenLeftBorder, (0, thisSideBorderY))
             finalImage.paste(self.statsScreenRightBorder, (totalWidth - self.statsScreenRightBorder.size[0], thisSideBorderY))
             
