@@ -1,8 +1,18 @@
 v1.1:
 • About-Box
-• 600 pixels width
 • write Release Notes
+• upper right: part black
 • abort if files can't be found
+
+Changes from v1.0 to v1.1:
+* Improved installer:
+  + can now optionally create desktop icon
+  + can now optionally create quicklaunch icon
+  + can now optionally launch executable after installation has finished
+* merged images are now exactly 600 pixels wide
+* fixed some issues causing the preview window to cut off some pixels of the image on all sides
+
+
 
 v2.0:
 	GUI:
@@ -19,6 +29,7 @@ v2.0:
 	• free cropped images asap / reduce memory usage
 	• add button to open merged image in image editor
 	• optionally delete merged images
+	• find a better font for the line at the bottom, Arial isn't very well readable at this size (and probably not anti-aliased)
 	
 	Error handling/reporting:
 	• catch&log any unexpected exceptions occuring during merging

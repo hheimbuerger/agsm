@@ -39,6 +39,7 @@ additionalFiles = (
                     "StatsScreenLeftBorder.png",
                     "StatsScreenRightBorder.png",
                     "StatsScreenTopBorder.png",
+                    "StatsScreenDetectionTemplate.png",
                   )
 
 # delete old dist directory (just to be sure)
