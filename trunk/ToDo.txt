@@ -1,12 +1,8 @@
-help/website:
-• no Slipstream support
-• don't screenshot mouse cursor
-• no change of any sorting during screenshotting
-• only on fullscreen
-• new features
-
-v1.0:
-	• write documentation/website
+v1.1:
+• About-Box
+• 600 pixels width
+• write Release Notes
+• abort if files can't be found
 
 v2.0:
 	GUI:
