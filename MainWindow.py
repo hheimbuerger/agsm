@@ -13,7 +13,7 @@ from AboutWindow import AboutWindow
 
 
 class MainWindow(wx.Frame):
-    PREVIEW_WIDTH = 612
+    PREVIEW_WIDTH = 600+4
     FILES_TO_PARSE_WARNING_THRESHOLD = 100
     
     def __init__(self):
@@ -92,7 +92,8 @@ class MainWindow(wx.Frame):
         labelClusters = wx.StaticText(parent=basePanel, label="Detected clusters (latest first):")
         self.listClusters = wx.ListBox(parent=basePanel, style=wx.LB_SINGLE | wx.LB_ALWAYS_SB)
         labelPreview = wx.StaticText(parent=basePanel, label="Preview of merged image:")
-        self.imagePreview = wx.StaticBitmap(parent=basePanel, size=(MainWindow.PREVIEW_WIDTH, -1), style=wx.SUNKEN_BORDER)        #, bitmap=wxIm
+        #self.imagePreview = wx.StaticBitmap(parent=basePanel, size=(MainWindow.PREVIEW_WIDTH, -1), style=wx.SUNKEN_BORDER)        #, bitmap=wxIm
+        self.imagePreview = wx.Panel(parent=basePanel, size=(MainWindow.PREVIEW_WIDTH, -1), style=wx.SUNKEN_BORDER)        #, bitmap=wxIm
         self.imagePreview.SetMaxSize((MainWindow.PREVIEW_WIDTH, -1))
         self.imagePreview.SetMinSize((MainWindow.PREVIEW_WIDTH, -1))
         self.scrollPreview = wx.ScrollBar(basePanel, style=wx.SB_VERTICAL)
@@ -152,6 +153,7 @@ class MainWindow(wx.Frame):
         self.listClusters.Bind(wx.EVT_LISTBOX, self.onClusterSelect)
         self.buttonProcess.Bind(wx.EVT_BUTTON, self.onButtonProcessAbortClick)
         self.imagePreview.Bind(wx.EVT_SIZE, self.updatePreviewDetail)
+        self.imagePreview.Bind(wx.EVT_PAINT, self.onImageRedraw)
         self.scrollPreview.Bind(wx.EVT_SCROLL, self.updatePreviewDetail)
         self.buttonSave.Bind(wx.EVT_BUTTON, self.saveMergedImage)
         self.Bind(wx.EVT_CLOSE, self.onClose)
@@ -220,7 +222,7 @@ class MainWindow(wx.Frame):
             self.listClusters.Append(cluster.getTitle())
         self.setGUIState()
         if(self.statsMerger.abortProcessing):
-            self.SetStatusText("Screenshot processing aborting, listing only those clusters already processed successfully.")
+            self.SetStatusText("Screenshot processing aborted, listing only those clusters already processed successfully.")
         else:
             self.SetStatusText("Screenshot processing complete.")
 
@@ -257,7 +259,6 @@ class MainWindow(wx.Frame):
     def onButtonProcessAbortClick(self, event):
         if(self.isProcessing):
             self.doAbortProcessing()
-            pass #trigger abort
         else:
             self.doProcess()
 
@@ -275,24 +276,39 @@ class MainWindow(wx.Frame):
 
 
 
-    def updatePreviewDetail(self, event):
+    def redrawPreviewImage(self, dc):
         if(self.currentPreviewImage):
             pos = self.scrollPreview.GetThumbPosition()
             thumbSize = self.scrollPreview.GetSizeTuple()[1]
             box = (0, pos, self.currentPreviewImage.size[0], pos + thumbSize)
             croppedImage = self.currentPreviewImage.crop(box)
+            
             wxIm = self.pilToImage(croppedImage)
-            self.imagePreview.SetBitmap(wxIm)
+            dc.DrawBitmap(wxIm, 0, 0, False)
+            #self.imagePreview.SetBitmap(wxIm)
         else:
             imagePreviewSize = self.imagePreview.GetSizeTuple()
             backColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENU)    # SYS_COLOUR_WINDOW seems to give the wrong colour, at least not the one I was expecting
             emptyImage = wx.EmptyImage(imagePreviewSize[0], imagePreviewSize[1])
             emptyImage.SetRGBRect((0, 0, imagePreviewSize[0], imagePreviewSize[1]), backColor[0], backColor[1], backColor[2])
             emptyBitmap = emptyImage.ConvertToBitmap()
-            self.imagePreview.SetBitmap(emptyBitmap)
+            dc.DrawBitmap(emptyBitmap, 0, 0, False)
+            #self.imagePreview.SetBitmap(emptyBitmap)
             #self.imagePreview.SetBitmap(wx.EmptyBitmap(imagePreviewSize[0], imagePreviewSize[1]))
             #self.imagePreview.SetBitmap(wx.NullBitmap)
 
+
+
+    def updatePreviewDetail(self, event):
+        clientDC = wx.ClientDC(self.imagePreview)
+        self.redrawPreviewImage(clientDC)
+
+
+
+    def onImageRedraw(self, event):
+        paintDC = wx.PaintDC(self.imagePreview)
+        self.redrawPreviewImage(paintDC)
+        
 
     
     def onClusterSelect(self, event):

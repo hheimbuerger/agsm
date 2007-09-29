@@ -7,8 +7,10 @@ import settings
 
 
 
+
 class AbortProcessing(Exception):
     pass
+
 
 
 
@@ -73,6 +75,8 @@ class Cluster:
 class StatsMerger:
     reScreenshotFile = re.compile(r"(?P<filename>(\d{4})-(\d{1,2})-(\d{1,2})_(\d{1,2})\.(\d{1,2})\.(\d{1,2})\.\d{1,3}\.bmp)")
     MIN_SYNC_LINES = 3
+    FINAL_IMAGE_WIDTH = 600
+    SCROLLBAR_X_POS = 580
 
 
     
@@ -84,6 +88,7 @@ class StatsMerger:
         self.currentState = None
         self.abortProcessing = False
         self.clusters = []
+        self.statsScreenDetectionTemplate = Image.open("StatsScreenDetectionTemplate.png")
         self.statsScreenTopBorder = Image.open("StatsScreenTopBorder.png")
         self.statsScreenRightBorder = Image.open("StatsScreenRightBorder.png")
         self.statsScreenBottomBorder = Image.open("StatsScreenBottomBorder.png")
@@ -169,10 +174,10 @@ class StatsMerger:
         
         # prepare some variables
         imageData = image.getdata()
-        templateData = self.statsScreenTopBorder.getdata()
+        templateData = self.statsScreenDetectionTemplate.getdata()
         imageWidth = image.size[0]
-        templateWidth = self.statsScreenTopBorder.size[0]
-        templateHeight = self.statsScreenTopBorder.size[1]
+        templateWidth = self.statsScreenDetectionTemplate.size[0]
+        templateHeight = self.statsScreenDetectionTemplate.size[1]
         
         # check if the image contains the stats top border
         for x in xrange(0, templateWidth):
@@ -378,7 +383,10 @@ class StatsMerger:
     def getTeamStats(self, filename):
         image = Image.open(os.path.join(self.path, filename))
         box = (88, 276, 700, 409)
-        return(image.crop(box))
+        teamStats = image.crop(box)
+        rightBorder = teamStats.crop((591, 0, 612, teamStats.size[1]))
+        teamStats.paste(rightBorder, (StatsMerger.FINAL_IMAGE_WIDTH - rightBorder.size[0], 0))
+        return(teamStats.crop((0, 0, StatsMerger.FINAL_IMAGE_WIDTH, teamStats.size[1])))
     
     
     
@@ -421,10 +429,10 @@ class StatsMerger:
         finalImage.paste(self.statsScreenBottomBorder, (0, bottomBorderY))
         
         # draw the scrollbar
-        finalImage.paste(self.scrollbarPointerUp, (584, 32))
+        finalImage.paste(self.scrollbarPointerUp, (StatsMerger.SCROLLBAR_X_POS, 32))
         artificialScrollbarHeight = innerHeight-12
-        drawer.rectangle((587, 38, 592, 38+artificialScrollbarHeight), outline=(255,255,255), fill=(255,255,255))
-        finalImage.paste(self.scrollbarPointerDown, (584, 38+artificialScrollbarHeight))
+        drawer.rectangle((StatsMerger.SCROLLBAR_X_POS+3, 38, StatsMerger.SCROLLBAR_X_POS+8, 38+artificialScrollbarHeight), outline=(255,255,255), fill=(255,255,255))
+        finalImage.paste(self.scrollbarPointerDown, (StatsMerger.SCROLLBAR_X_POS, 38+artificialScrollbarHeight))
 
         # add the team stats
         finalImage.paste(teamStats, (0, teamStatsY))
