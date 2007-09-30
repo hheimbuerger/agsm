@@ -28,6 +28,8 @@ import sys
 
 
 
+pathToReleaseNotes = "# Release\\ReleaseNotes_v%s.txt" % (settings.versionNumber)
+
 # delete old dist directory (just to be sure)
 if(settings.distDir in os.listdir(".")):
     shutil.rmtree(settings.distDir)
@@ -52,7 +54,7 @@ else:
 os.system("src\\build.py py2exe")
 
 # wrap the Release Notes
-response = os.popen("tools\TextfileWrapper.py \"# Release\ReleaseNotes_unwrapped.txt\" \"# Release\ReleaseNotes.txt\"")
+response = os.popen("tools\TextfileWrapper.py \"# Release\ReleaseNotes_unwrapped.txt\" \"%s\"" % (pathToReleaseNotes))
 result = response.readlines()
 if(response.close()):
     print "ReleaseNotes wrapping failed!"
@@ -64,7 +66,7 @@ else:
 # add some additional files to the distribution
 for file in settings.requiredExternalFiles:
     shutil.copy2(os.path.join("media/", file), settings.distDir + "/")
-shutil.copy2("# Release\ReleaseNotes.txt", settings.distDir + "/")
+shutil.copy2(pathToReleaseNotes, settings.distDir + "/")
 print "Additional files copied into the distribution directory."
 
 # generate the installer
