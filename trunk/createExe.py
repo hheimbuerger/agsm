@@ -29,19 +29,6 @@ import sys
 
 
 
-# these are the files we want to package with the executable
-additionalFiles = (
-                    settings.icon,
-                    "Logo.png",
-                    "ScrollbarPointerDown.png",
-                    "ScrollbarPointerUp.png",
-                    "StatsScreenBottomBorder.png",
-                    "StatsScreenLeftBorder.png",
-                    "StatsScreenRightBorder.png",
-                    "StatsScreenTopBorder.png",
-                    "StatsScreenDetectionTemplate.png",
-                  )
-
 # delete old dist directory (just to be sure)
 if(settings.distDir in os.listdir(".")):
     shutil.rmtree(settings.distDir)
@@ -90,6 +77,6 @@ py2exeLog.close()
 print "Executable generated, log in py2exe.log."
 
 # add some additional files to the distribution
-for file in additionalFiles:
+for file in settings.requiredExternalFiles:
     shutil.copy2(file, settings.distDir)
 print "Additional files copied into the distribution directory."
