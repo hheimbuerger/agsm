@@ -76,7 +76,18 @@ sys.stdout = origStdout
 py2exeLog.close()
 print "Executable generated, log in py2exe.log."
 
+# wrap the Release Notes
+response = os.popen("tools\TextfileWrapper.py \"# Release\ReleaseNotes_unwrapped.txt\" \"# Release\ReleaseNotes.txt\"")
+result = response.readlines()
+if(response.close()):
+    print "ReleaseNotes wrapping failed!"
+    sys.exit(1)
+else:
+    print "ReleaseNotes wrapped successfully:"
+    print "  " + result[0].strip()
+
 # add some additional files to the distribution
 for file in settings.requiredExternalFiles:
     shutil.copy2(file, settings.distDir)
+shutil.copy2("# Release\ReleaseNotes.txt", settings.distDir)
 print "Additional files copied into the distribution directory."
