@@ -37,23 +37,33 @@ class AboutWindow(wx.Dialog):
         bitmapLogo = wx.StaticBitmap(parent=basePanel, style=wx.SUNKEN_BORDER, bitmap=logo)
         text = "%s (%s) v%s\n\n" \
                "Merges existing game stats screenshots from Allegiance to a complete image.\n\n" \
-               "Please report any errors you find to henrik@heimbuerger.de or PM 'Cortex' at the freeallegiance.org boards.\n\n" \
+               "Please report any errors you find and include the version number, the screenshots you tried to process and the " \
+               "log.\n\n" \
                "Quick instructions:\n" \
-               "  1. Confirm your Allegiance directory has be detected correctly.\n" \
+               "  1. Confirm your Allegiance directory has been detected correctly.\n" \
                "  2. Click on the 'Process' button.\n" \
-               "  3. Look in the clusters list for the game stats you want to merge.\n" \
+               "  3. Look in the clusters list for the game whose stats you want to merge.\n" \
                "  4. Check the log to make sure merging was successful.\n" \
-               "  5. Modify the file name at the bottom if needed and click on 'Save'." \
+               "  5. Modify the file name at the bottom if needed and click on 'Save'.\n" \
+               "\n" \
+               "\n" \
+               "Contact information:\n" \
                % (settings.name, settings.longName, settings.versionNumber)
         labelText = wx.StaticText(parent=basePanel, label=text)
         buttonOK = wx.Button(parent=basePanel, label="OK")
+        hyperlinkEMail = wx.HyperlinkCtrl(parent=basePanel, id=wx.ID_ANY, style=wx.NO_BORDER | wx.HL_ALIGN_LEFT | wx.HL_CONTEXTMENU, label="e-mail to henrik@heimbuerger.de", url="mailto:henrik@heimbuerger.de")
+        hyperlinkForum = wx.HyperlinkCtrl(parent=basePanel, id=wx.ID_ANY, style=wx.NO_BORDER | wx.HL_ALIGN_LEFT | wx.HL_CONTEXTMENU, label="PM 'Cortex' at the freeallegiance.org boards", url="http://www.freeallegiance.org/forums/index.php?showuser=4012")
         
         # create the sizers
-        hsizer = wx.BoxSizer(wx.HORIZONTAL)
-        hsizer.Add(bitmapLogo, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=30)
-        hsizer.Add(labelText, proportion=1, flag=wx.EXPAND)
+        hsizer = wx.BoxSizer(wx.VERTICAL)
+        hsizer.Add(labelText, proportion=0)
+        hsizer.Add(hyperlinkEMail, proportion=0, flag=wx.LEFT, border=20)
+        hsizer.Add(hyperlinkForum, proportion=0, flag=wx.LEFT, border=20)
+        logoTextSizer = wx.BoxSizer(wx.HORIZONTAL)
+        logoTextSizer.Add(bitmapLogo, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=30)
+        logoTextSizer.Add(hsizer, proportion=1)        # , flag=wx.ALL, border=30
         vsizer = wx.BoxSizer(wx.VERTICAL)
-        vsizer.Add(hsizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=20)
+        vsizer.Add(logoTextSizer, proportion=1, flag=wx.ALL, border=20)
         vsizer.Add(buttonOK, proportion=0, flag=wx.EXPAND | wx.ALL, border=20)
         basePanel.SetSizer(vsizer)
         basePanel.SetAutoLayout(True)

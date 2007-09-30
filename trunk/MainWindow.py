@@ -74,7 +74,7 @@ class MainWindow(wx.Frame):
                     "Help",
                     "",
                     (
-                         ("Help / &About", "Show the about screen", self.doShowCredits),
+                         ("&About / Quickstart", "Show the about screen", self.doShowCredits),
                     ),
                 ),
             ]
