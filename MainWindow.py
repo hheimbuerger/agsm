@@ -152,9 +152,9 @@ class MainWindow(wx.Frame):
         # bind events
         self.listClusters.Bind(wx.EVT_LISTBOX, self.onClusterSelect)
         self.buttonProcess.Bind(wx.EVT_BUTTON, self.onButtonProcessAbortClick)
-        self.imagePreview.Bind(wx.EVT_SIZE, self.updatePreviewDetail)
+        self.imagePreview.Bind(wx.EVT_SIZE, self.onPreviewResize)
         self.imagePreview.Bind(wx.EVT_PAINT, self.onImageRedraw)
-        self.scrollPreview.Bind(wx.EVT_SCROLL, self.updatePreviewDetail)
+        self.scrollPreview.Bind(wx.EVT_SCROLL, self.onScroll)
         self.buttonSave.Bind(wx.EVT_BUTTON, self.saveMergedImage)
         self.Bind(wx.EVT_CLOSE, self.onClose)
 
@@ -263,16 +263,23 @@ class MainWindow(wx.Frame):
             self.doProcess()
 
 
+    
+    def updateScrollbarParameters(self, newScrollbarPos = None):
+        thumbSize = self.scrollPreview.GetSizeTuple()[1]
+        if(not newScrollbarPos):
+            newScrollbarPos = self.scrollPreview.GetThumbPosition()
+        self.scrollPreview.SetScrollbar(newScrollbarPos, thumbSize, self.currentPreviewImage.size[1], thumbSize);
+
+
         
     def setNewPreviewImage(self, image):
         self.currentPreviewImage = image
         if(image):
-            thumbSize = self.scrollPreview.GetSizeTuple()[1]
-            self.scrollPreview.SetScrollbar(0, thumbSize, image.size[1], thumbSize);
+            self.updateScrollbarParameters(0)
             self.scrollPreview.Enable(True)
         else:
             self.scrollPreview.Enable(False)
-        self.updatePreviewDetail(None)
+        self.updatePreviewDetail()
 
 
 
@@ -299,7 +306,7 @@ class MainWindow(wx.Frame):
 
 
 
-    def updatePreviewDetail(self, event):
+    def updatePreviewDetail(self):
         clientDC = wx.ClientDC(self.imagePreview)
         self.redrawPreviewImage(clientDC)
 
@@ -308,6 +315,17 @@ class MainWindow(wx.Frame):
     def onImageRedraw(self, event):
         paintDC = wx.PaintDC(self.imagePreview)
         self.redrawPreviewImage(paintDC)
+
+
+
+    def onPreviewResize(self, event):
+        self.updateScrollbarParameters()
+        self.updatePreviewDetail()
+    
+    
+    
+    def onScroll(self, event):
+        self.updatePreviewDetail()
         
 
     
