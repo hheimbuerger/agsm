@@ -1,8 +1,6 @@
 v1.1:
 • About-Box
 • write Release Notes
-• upper right: part black
-• abort if files can't be found
 
 Changes from v1.0 to v1.1:
 * Improved installer:
