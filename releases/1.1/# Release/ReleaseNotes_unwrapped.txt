@@ -1,0 +1,136 @@
+/*****************************************************************************\
+| AGSM v1.1 -- Release Notes                                                  |
+\*****************************************************************************/
+
+
+
+Overview:
+---------
+AGSM can take stats screenshots you made from within Allegiance (using the 'PrntScr' button on the stats page) and merge them into one complete image.
+
+Allegiance currently doesn't allow you to export game stats. What you can do is take screenshots of the stats pages. Unfortunately, only twelve players will be shown per screenshot. But if you want to post the stats of a game on the forum, you'll want to include all players.
+
+The usual way the community handles this is to take screenshots of all the pages, then merge them manually in some raster image editor. AGSM automates the last of these steps. It will *not* help you take the actual screenshots, it can just combine them to one image.
+
+If you follow some simple rules, you'll end up with pretty clean images.
+
+
+
+Usage:
+------
+AGSM is designed for taking as much work from you as possible. So almost everything is automated.
+
+That means, AGSM will automatically try to find 'clusters' in your screenshots. It will analyse when you took those screenshots and will group all those together taken in short intervals.
+
+It will also analyse and reorder them depending on the position of the scrollbar included in the screenshots. Therefore, it doesn't matter in which order you take them. You can go upside down or downside up or even jump around like crazy, it doesn't matter.
+
+The screenshots can also overlap. You can take them using page scrolling (clicking the scrollbar above or below the 'thumb'), but you'll get better results if you create them with a bit of overlap. The overlapping parts with automatically be removed.
+
+Let's have a look at a screenshot of the GUI [http://henrik.heimbuerger.de/files/alleg/AGSM/GUI_v1.0.png] and talk about the controls and what they do.
+
+   1. Here you can select the source directory, i.e. the directory your screenshots are in. The Allegiance directory should be entered there by default, so there's normally nothing to do.
+   2. The 'screenshot timeframe' determines how your screenshots are grouped into clusters. Two screenshots will be considered as being in different clusters if the first screenshot of one cluster has been taken more than the amount of seconds you enter here after the last screenshot of the previous cluster. Another way to look at it would be that if you put 60s here, you'll have to wait 60s after taking one set of screenshots before you start the next. In general, this value should do fine and there shouldn't be any need to adjust it.
+   3. Click the 'Process' button to start the processing. This will fill the list box marked with (4). (It's empty when you start the application.) Click it again to abort it.
+   4. You'll get a list of the detected clusters and when you started to take them. Pay attention to those being marked with '[WARNINGS]', something went wrong there. Those having '[FAILED]' can't be saved. (Probably because it's not a cluster of stats screenshots.) Select a cluster here to see the merged image in (5).
+   5. You can see the final image here. Make sure no player is missing.
+   6. The log will tell you everything the application has done to merge the screenshots together. Pay attention to lines like 'merging failed' or 'file discarded' (but those also generate warnings in the cluster list).
+   7. The application will suggest to save the file in the directory your screenshots came from and will suggest a filename based on the time the screenshots were taken. This filename is also 'URL-compatible', i.e. you can upload the file and link it without having to do any escaping of special characters. Nevertheless, you can change it if you want.
+   8. Click on 'Save' to write the image you saw in (5) to the disk.
+
+
+
+Usage summary:
+--------------
+Launch the application, click on 'Process', select cluster, click on 'Save', upload file and post.
+
+
+
+Limitations:
+------------
+    * Screenshots using Slipstream GUI are not supported.
+    * Whether there are general problems with merging, only your tests will tell. I couldn't produce any with my screenshots…
+    * Processing is rather fast, but might take some memory. I have a maximum memory usage of 75MB for a short time with about 90 screenshots in my directory. It completely depends on how many of those have to be merged and how many are actually stats screenshots, so YMMV. But yeah, optimisations would most probably be possible.
+
+
+
+Tips for getting best results:
+------------------------------
+    * You can use page scrolling (clicking the scrollbar above or below the 'thumb'), but you'll end up with the white lines following the first player of a page then. You'll get better results if you scroll with some overlap, e.g. by taking a screenshot every half page.
+    * Make sure you move the mouse cursor away from the stats region and also don't have it hovered over the scrollbar. Just flick your mouse so the cursor moves to some corner of the screen, then press the button. smile.gif
+    * Don't have a line in the stats selected. If you accidentally did select one, just switch to the game lobby and back to the stats and it will disappear.
+    * Don't change the sorting order while taking your set of screenshots (duh).
+    * Screenshot in fullscreen mode. (I actually haven't tested what happens when you screenshot in windowed mode.)
+
+
+
+Reporting bugs:
+---------------
+When you're reporting bugs or incorrect merge results, PLEASE also
+upload/e-mail me the files you tried to process (no worries, BMPs are
+compressed to tiny archives, even when using a crappy format like ZIP,
+and I can uncompress pretty much anything) and the shown log. If I can't
+reproduce it, your report is pretty worthless. :(
+
+
+
+Version history:
+----------------
+v1.1 (2007-09-30):
+  * merged images are now exactly 600 pixels wide
+  * fixed issues causing the preview window to cut off some pixels of the image on all sides (switched from wxImageBox to using the DC on a wxPanel)
+  * fixed issues causing the scrollbar parameters to be incorrectly set after the window has been resized 
+  * Improved installer:
+    + can now optionally create desktop icon
+    + can now optionally create quicklaunch icon
+    + can now optionally launch executable after installation has finished
+  + application now aborts if required external files are missing
+  * minor improvements of the About screen
+
+v1.0 (2007-09-26):
+  [Initial release] 
+
+
+
+To Do:
+------
+Current list of suggested features for a potential v2.0:
+    GUI:
+    • define minimum size for window
+    • change mouse cursor to hourglass while processing?
+    • second colon in output filename leads to weird bug
+    • replace the ugly file/dir pickers with editbox+icon
+    • double-buffering / get rid of preview flickering
+    • optimise process of creating empty preview imagebox
+    • save GUI window size/position
+    
+    Processing:
+    • support Slipstream GUI
+    • do some profiling on the actual merging process and optimise progress bar
+    • free cropped images asap / reduce memory usage
+    • add button to open merged image in image editor
+    • optionally delete merged images
+    • find a better font for the line at the bottom, Arial isn't very well readable at this size (and probably not anti-aliased)
+    
+    Error handling/reporting:
+    • catch&log any unexpected exceptions occuring during merging
+    • show proper error message for unexpected exceptions from the GUI
+    • log exceptions from processing or GUI and allow them to be automatically submitted
+    • implement 'check for updates'
+
+    Meta:   
+    [none]
+
+
+
+Contact information:
+--------------------
+Cort:
+  e-mail: henrik@heimbuerger.de
+  Skype: hheimbuerger
+  PM at freeallegiance.org-boards: Cortex
+
+
+
+Acknowledgements:
+-----------------
+Thanks to badpazzword, aarmstrong and the other testers in #RollingThunder.
