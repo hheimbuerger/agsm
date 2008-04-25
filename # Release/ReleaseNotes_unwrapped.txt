@@ -1,5 +1,5 @@
 /*****************************************************************************\
-| AGSM v1.1 -- Release Notes                                                  |
+| AGSM v1.11 -- Release Notes                                                 |
 \*****************************************************************************/
 
 
@@ -75,6 +75,9 @@ reproduce it, your report is pretty worthless. :(
 
 Version history:
 ----------------
+v1.11 (2007-12-03):
+  * fixed issue that caused AGSM to fail to recognise all screenshots created by Allegiance R4 (added R4 stats screen detection template)
+
 v1.1 (2007-09-30):
   * merged images are now exactly 600 pixels wide
   * fixed issues causing the preview window to cut off some pixels of the image on all sides (switched from wxImageBox to using the DC on a wxPanel)
