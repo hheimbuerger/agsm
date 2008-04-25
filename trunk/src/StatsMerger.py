@@ -88,7 +88,8 @@ class StatsMerger:
         self.currentState = None
         self.abortProcessing = False
         self.clusters = []
-        self.statsScreenDetectionTemplate = Image.open("StatsScreenDetectionTemplate.png")
+        self.statsScreenDetectionTemplateR3 = Image.open("StatsScreenDetectionTemplateR3.png")
+        self.statsScreenDetectionTemplateR4 = Image.open("StatsScreenDetectionTemplateR4.png")
         self.statsScreenTopBorder = Image.open("StatsScreenTopBorder.png")
         self.statsScreenRightBorder = Image.open("StatsScreenRightBorder.png")
         self.statsScreenBottomBorder = Image.open("StatsScreenBottomBorder.png")
@@ -164,9 +165,18 @@ class StatsMerger:
         
         # and we return the list of clusters
         return(clusters)
-    
-    
-    
+            
+            
+            
+    def areImagesEqual(self, imageData, templateData, imageWidth, templateWidth, templateHeight):
+        for x in xrange(0, templateWidth):
+            for y in xrange(0, templateHeight):
+                if(imageData[(50+y)*imageWidth+(88+x)] != templateData[y*templateWidth+x]):
+                    return(False)
+        return(True)
+
+
+
     def isStatsScreenshot(self, image):
         # shortcut if this can't be a stats screenshot
         if(image.size[0] != 800 or image.size[1] != 600):
@@ -174,17 +184,17 @@ class StatsMerger:
         
         # prepare some variables
         imageData = image.getdata()
-        templateData = self.statsScreenDetectionTemplate.getdata()
+        templateDataR3 = self.statsScreenDetectionTemplateR3.getdata()
+        templateDataR4 = self.statsScreenDetectionTemplateR4.getdata()
         imageWidth = image.size[0]
-        templateWidth = self.statsScreenDetectionTemplate.size[0]
-        templateHeight = self.statsScreenDetectionTemplate.size[1]
+        templateWidth = self.statsScreenDetectionTemplateR3.size[0]
+        templateHeight = self.statsScreenDetectionTemplateR3.size[1]
         
         # check if the image contains the stats top border
-        for x in xrange(0, templateWidth):
-            for y in xrange(0, templateHeight):
-                if(imageData[(50+y)*imageWidth+(88+x)] != templateData[y*templateWidth+x]):
-                    return(False)
-        return(True)
+        if(self.areImagesEqual(imageData, templateDataR3, imageWidth, templateWidth, templateHeight)):
+            return(True)
+        else:
+            return(self.areImagesEqual(imageData, templateDataR4, imageWidth, templateWidth, templateHeight))
     
     
     

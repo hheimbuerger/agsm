@@ -4,7 +4,7 @@
 [Setup]
 AppId=AGSM
 AppName=AGSM
-AppVerName=AGSM 1.1
+AppVerName=AGSM 1.11
 AppPublisher=HHSE
 AppPublisherURL=http://henrik.heimbuerger.de/
 AppSupportURL=http://henrik.heimbuerger.de/
@@ -13,7 +13,7 @@ DefaultDirName={pf}\Microsoft Games\Allegiance\AGSM
 DefaultGroupName=Allegiance
 AllowNoIcons=yes
 OutputDir=installer_dist
-OutputBaseFilename=AGSM_v1.1
+OutputBaseFilename=AGSM_v1.11
 Compression=lzma
 SolidCompression=yes
 

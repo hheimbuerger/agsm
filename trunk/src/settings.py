@@ -3,7 +3,7 @@ longName = "AllegGameStatsMerger"
 name = "AGSM"
 icon = "AllegGameStatsMerger.ico"
 exeFilename = "AllegGameStatsMerger"
-versionNumber = "1.1"
+versionNumber = "1.11"
 allegPathRegistryKey = "SOFTWARE\\Microsoft\\Microsoft Games\\Allegiance\\1.0"
 allegPathRegistryValue = "EXE Path"
 distDir = "dist"
@@ -20,5 +20,6 @@ requiredExternalFiles = (
                     "StatsScreenLeftBorder.png",
                     "StatsScreenRightBorder.png",
                     "StatsScreenTopBorder.png",
-                    "StatsScreenDetectionTemplate.png",
+                    "StatsScreenDetectionTemplateR3.png",
+                    "StatsScreenDetectionTemplateR4.png",
                   )
